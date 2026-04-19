@@ -1,0 +1,139 @@
+_id,Destinations,Flights per week
+69e51ab27e4f0ef8ea7092f4,Abidjan,7
+69e51ab27e4f0ef8ea7092f5,Abuja,4
+69e51ab27e4f0ef8ea7092f6,Lagos,0
+69e51ab27e4f0ef8ea7092f7,Accra,7
+69e51ab27e4f0ef8ea7092f8,Addis Ababa,6
+69e51ab27e4f0ef8ea7092f9,Cape Town,7
+69e51ab27e4f0ef8ea7092fa,Durban,9
+69e51ab27e4f0ef8ea7092fb,Johannesburg,14
+69e51ab27e4f0ef8ea7092fc,Casablanca,7
+69e51ab27e4f0ef8ea7092fd,Algiers,0
+69e51ab27e4f0ef8ea7092fe,Cairo,20
+69e51ab27e4f0ef8ea7092ff,Entebbe,5
+69e51ab27e4f0ef8ea709300,Dar Es Salaam,7
+69e51ab27e4f0ef8ea709301,Conakry,32
+69e51ab27e4f0ef8ea709302,Dakar Blaise Diagne,4
+69e51ab27e4f0ef8ea709303,Lusaka,26
+69e51ab27e4f0ef8ea709304,Khartoum,21
+69e51ab27e4f0ef8ea709305,Harare,37
+69e51ab27e4f0ef8ea709306,Luanda,9
+69e51ab27e4f0ef8ea709307,Nairobi,36
+69e51ab27e4f0ef8ea709308,Mauritius,0
+69e51ab27e4f0ef8ea709309,Tunis,19
+69e51ab27e4f0ef8ea70930a,Adelaide,0
+69e51ab27e4f0ef8ea70930b,Brisbane,13
+69e51ab27e4f0ef8ea70930c,Melbourne,21
+69e51ab27e4f0ef8ea70930d,Perth,12
+69e51ab27e4f0ef8ea70930e,Sydney,18
+69e51ab27e4f0ef8ea70930f,Amdabad,26
+69e51ab27e4f0ef8ea709310,Banglore,62
+69e51ab27e4f0ef8ea709311,Chennai,67
+69e51ab27e4f0ef8ea709312,Delhi,81
+69e51ab27e4f0ef8ea709313,Hyderabad,59
+69e51ab27e4f0ef8ea709314,Kochi,61
+69e51ab27e4f0ef8ea709315,Kolkata,15
+69e51ab27e4f0ef8ea709316,Mumbai,82
+69e51ab27e4f0ef8ea709317,Thiruvananthapuram,25
+69e51ab27e4f0ef8ea709318,Auckland,51
+69e51ab27e4f0ef8ea709319,Christchurch,0
+69e51ab27e4f0ef8ea70931a,Bangkok,87
+69e51ab27e4f0ef8ea70931b,Phuket,29
+69e51ab27e4f0ef8ea70931c,Colombo,81
+69e51ab27e4f0ef8ea70931d,Beijing,0
+69e51ab27e4f0ef8ea70931e,Guangzhou,10
+69e51ab27e4f0ef8ea70931f,Shanghai,0
+69e51ab27e4f0ef8ea709320,Cebu,9
+69e51ab27e4f0ef8ea709321,Clark,27
+69e51ab27e4f0ef8ea709322,Manila,33
+69e51ab27e4f0ef8ea709323,Denpasar,0
+69e51ab27e4f0ef8ea709324,Jakarta,45
+69e51ab27e4f0ef8ea709325,Hong Kong,32
+69e51ab27e4f0ef8ea709326,Dhaka,79
+69e51ab27e4f0ef8ea709327,Hanoi,17
+69e51ab27e4f0ef8ea709328,Ho Chi Minh City,9
+69e51ab27e4f0ef8ea709329,Kuala Lumpur,43
+69e51ab27e4f0ef8ea70932a,Islamabad,24
+69e51ab27e4f0ef8ea70932b,Karachi,53
+69e51ab27e4f0ef8ea70932c,Lahore,16
+69e51ab27e4f0ef8ea70932d,Peshawar,11
+69e51ab27e4f0ef8ea70932e,Sialkot,17
+69e51ab27e4f0ef8ea70932f,Kabul,10
+69e51ab27e4f0ef8ea709330,Male,57
+69e51ab27e4f0ef8ea709331,Seychelles,29
+69e51ab27e4f0ef8ea709332,Seoul,20
+69e51ab27e4f0ef8ea709333,Osaka,19
+69e51ab27e4f0ef8ea709334,Tokyo Haneda,0
+69e51ab27e4f0ef8ea709335,Tokyo Narita,23
+69e51ab27e4f0ef8ea709336,Singapore,31
+69e51ab27e4f0ef8ea709337,Taipei,18
+69e51ab27e4f0ef8ea709338,Yangon,0
+69e51ab27e4f0ef8ea709339,Amsterdam,46
+69e51ab27e4f0ef8ea70933a,Athens,9
+69e51ab27e4f0ef8ea70933b,Barcelona,50
+69e51ab27e4f0ef8ea70933c,Madrid,34
+69e51ab27e4f0ef8ea70933d,Brimingham,12
+69e51ab27e4f0ef8ea70933e,Edinburgh,0
+69e51ab27e4f0ef8ea70933f,Glasgow,14
+69e51ab27e4f0ef8ea709340,London Gatwick,0
+69e51ab27e4f0ef8ea709341,London Heathrow,131
+69e51ab27e4f0ef8ea709342,London Stansted,0
+69e51ab27e4f0ef8ea709343,Manchester,58
+69e51ab27e4f0ef8ea709344,New Castle,0
+69e51ab27e4f0ef8ea709345,Bologna,19
+69e51ab27e4f0ef8ea709346,Milan,26
+69e51ab27e4f0ef8ea709347,Rome,9
+69e51ab27e4f0ef8ea709348,Venice,5
+69e51ab27e4f0ef8ea709349,Brussels,63
+69e51ab27e4f0ef8ea70934a,Budapest,25
+69e51ab27e4f0ef8ea70934b,Geneva,63
+69e51ab27e4f0ef8ea70934c,Zurich,11
+69e51ab27e4f0ef8ea70934d,Dublin,36
+69e51ab27e4f0ef8ea70934e,Dusseldorf,28
+69e51ab27e4f0ef8ea70934f,Frankfurt,34
+69e51ab27e4f0ef8ea709350,Hamburg,40
+69e51ab27e4f0ef8ea709351,Munich,47
+69e51ab27e4f0ef8ea709352,Istanbul,33
+69e51ab27e4f0ef8ea709353,Istanbul Sabiha gokcen,0
+69e51ab27e4f0ef8ea709354,Larnaca,24
+69e51ab27e4f0ef8ea709355,Lisbon,18
+69e51ab27e4f0ef8ea709356,Lyon,4
+69e51ab27e4f0ef8ea709357,Nice,8
+69e51ab27e4f0ef8ea709358,Paris,21
+69e51ab27e4f0ef8ea709359,Malta,6
+69e51ab27e4f0ef8ea70935a,Moscow,44
+69e51ab27e4f0ef8ea70935b,Saint Petersburg,14
+69e51ab27e4f0ef8ea70935c,Oslo,19
+69e51ab27e4f0ef8ea70935d,Prague,26
+69e51ab27e4f0ef8ea70935e,Stockholm,31
+69e51ab27e4f0ef8ea70935f,Vienna,36
+69e51ab27e4f0ef8ea709360,Warsaw,30
+69e51ab27e4f0ef8ea709361,Zagreb,0
+69e51ab27e4f0ef8ea709362,Boston,22
+69e51ab27e4f0ef8ea709363,Chicago,26
+69e51ab27e4f0ef8ea709364,Dallas,9
+69e51ab27e4f0ef8ea709365,Houston,17
+69e51ab27e4f0ef8ea709366,Los Angeles,31
+69e51ab27e4f0ef8ea709367,Miami,8
+69e51ab27e4f0ef8ea709368,New York,68
+69e51ab27e4f0ef8ea709369,Newark,14
+69e51ab27e4f0ef8ea70936a,Orlando,8
+69e51ab27e4f0ef8ea70936b,San Francisco,30
+69e51ab27e4f0ef8ea70936c,Seattle,10
+69e51ab27e4f0ef8ea70936d,Washington,15
+69e51ab27e4f0ef8ea70936e,Mexico City,5
+69e51ab27e4f0ef8ea70936f,Sao Paulo,14
+69e51ab27e4f0ef8ea709370,Torronto,10
+69e51ab27e4f0ef8ea709371,Amman,53
+69e51ab27e4f0ef8ea709372,Baghdad,16
+69e51ab27e4f0ef8ea709373,Basra,12
+69e51ab27e4f0ef8ea709374,Bahrain,85
+69e51ab27e4f0ef8ea709375,Beirut,40
+69e51ab27e4f0ef8ea709376,Dammam,67
+69e51ab27e4f0ef8ea709377,Jeddah,42
+69e51ab27e4f0ef8ea709378,Medina,13
+69e51ab27e4f0ef8ea709379,Riyadh,36
+69e51ab27e4f0ef8ea70937a,Muscat,21
+69e51ab27e4f0ef8ea70937b,Dubai,47
+69e51ab27e4f0ef8ea70937c,Kuwait,29
+69e51ab27e4f0ef8ea70937d,Tehran,50
