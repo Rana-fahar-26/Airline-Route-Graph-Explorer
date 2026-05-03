@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AeroGraph — Airline Route Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;600;700&display=swap"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+  <!-- ── Atmospheric Background ─────────────────────────────────── -->
+  <canvas id="starfield"></canvas>
+  <div class="globe-glow"></div>
+
+  <!-- ── Top Navigation Bar ────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+        <path d="M4 16L16 4L28 16L16 28L4 16Z" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="16" cy="16" r="4" fill="var(--accent)"/>
+        <line x1="16" y1="4" x2="16" y2="28" stroke="var(--accent)" stroke-width="0.5" stroke-dasharray="2 2"/>
+        <line x1="4" y1="16" x2="28" y2="16" stroke="var(--accent)" stroke-width="0.5" stroke-dasharray="2 2"/>
+      </svg>
+      <span class="logo-text">AERO<span class="logo-accent">GRAPH</span></span>
+    </div>
+    <nav class="topbar-nav">
+      <button class="nav-btn active" data-panel="explorer">Route Explorer</button>
+      <button class="nav-btn" data-panel="pathfinder">Pathfinder</button>
+      <button class="nav-btn" data-panel="analytics">Analytics</button>
+    </nav>
+    <div class="topbar-stats">
+      <div class="stat-chip">
+        <span class="stat-val" id="stat-airports">—</span>
+        <span class="stat-lbl">Airports</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val" id="stat-routes">—</span>
+        <span class="stat-lbl">Routes</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val" id="stat-airlines">—</span>
+        <span class="stat-lbl">Airlines</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main Layout ────────────────────────────────────────────── -->
+  <main class="workspace">
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+
+      <!-- ── Panel: Explorer ─────────────────────────────────── -->
+      <section class="panel active" id="panel-explorer">
+        <h2 class="panel-title">Airport Explorer</h2>
+
+        <div class="search-block">
+          <label class="field-label">Search Airport</label>
+          <div class="search-wrap">
+            <input type="text" id="airport-search" class="search-input"
+                   placeholder="IATA, city, or airport name…" autocomplete="off"/>
+            <svg class="search-icon" viewBox="0 0 20 20" fill="none">
+              <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="12" y1="12" x2="17" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <ul id="search-results" class="dropdown" hidden></ul>
+        </div>
+
+        <div id="airport-info" class="info-card" hidden>
+          <div class="info-header">
+            <span class="iata-badge" id="info-iata">JFK</span>
+            <div>
+              <p class="info-name" id="info-name">John F. Kennedy International</p>
+              <p class="info-location" id="info-location">New York, United States</p>
+            </div>
+          </div>
+          <div class="info-grid">
+            <div class="info-item"><span class="info-key">Latitude</span><span class="info-val" id="info-lat">—</span></div>
+            <div class="info-item"><span class="info-key">Longitude</span><span class="info-val" id="info-lon">—</span></div>
+            <div class="info-item"><span class="info-key">ICAO</span><span class="info-val" id="info-icao">—</span></div>
+            <div class="info-item"><span class="info-key">Timezone</span><span class="info-val" id="info-tz">—</span></div>
+          </div>
+          <div class="connectivity-bar">
+            <span class="conn-label">Out Routes</span><span class="conn-val" id="conn-out">—</span>
+            <span class="conn-label">In Routes</span><span class="conn-val" id="conn-in">—</span>
+            <span class="conn-label">2-Hop Reach</span><span class="conn-val" id="conn-reach">—</span>
+          </div>
+          <button class="btn-primary" id="btn-show-routes">Show Route Network</button>
+        </div>
+
+        <!-- Route List -->
+        <div id="routes-section" hidden>
+          <div class="section-header">
+            <h3 class="section-title">Outbound Routes <span id="route-count" class="badge">0</span></h3>
+          </div>
+          <ul id="routes-list" class="route-list"></ul>
+        </div>
+      </section>
+
+      <!-- ── Panel: Pathfinder ────────────────────────────────── -->
+      <section class="panel" id="panel-pathfinder">
+        <h2 class="panel-title">Shortest Path</h2>
+
+        <div class="search-block">
+          <label class="field-label">Origin Airport</label>
+          <div class="search-wrap">
+            <input type="text" id="path-from" class="search-input" placeholder="Departure (IATA or city)…" autocomplete="off"/>
+            <svg class="search-icon" viewBox="0 0 20 20" fill="none">
+              <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="12" y1="12" x2="17" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <ul id="path-from-results" class="dropdown" hidden></ul>
+        </div>
+
+        <div class="swap-row">
+          <div class="swap-line"></div>
+          <button id="btn-swap" class="btn-swap" title="Swap airports">⇅</button>
+          <div class="swap-line"></div>
+        </div>
+
+        <div class="search-block">
+          <label class="field-label">Destination Airport</label>
+          <div class="search-wrap">
+            <input type="text" id="path-to" class="search-input" placeholder="Arrival (IATA or city)…" autocomplete="off"/>
+            <svg class="search-icon" viewBox="0 0 20 20" fill="none">
+              <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="12" y1="12" x2="17" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <ul id="path-to-results" class="dropdown" hidden></ul>
+        </div>
+
+        <div class="mode-toggle">
+          <label class="field-label">Optimise For</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-mode="hops">Min Hops</button>
+            <button class="toggle-btn" data-mode="distance">Min Distance</button>
+          </div>
+        </div>
+
+        <button id="btn-find-path" class="btn-primary">Calculate Route</button>
+
+        <div id="path-result" hidden>
+          <div class="path-summary">
+            <div class="path-metric"><span class="pm-val" id="path-hops">0</span><span class="pm-lbl">Stops</span></div>
+            <div class="path-metric"><span class="pm-val" id="path-dist">—</span><span class="pm-lbl">Approx km</span></div>
+          </div>
+          <ol id="path-stops" class="path-stops-list"></ol>
+        </div>
+
+        <div id="path-no-result" hidden class="no-result">
+          <p>No route found between these airports.</p>
+          <p class="no-result-hint">Try a different pair or check IATA codes.</p>
+        </div>
+      </section>
+
+      <!-- ── Panel: Analytics ─────────────────────────────────── -->
+      <section class="panel" id="panel-analytics">
+        <h2 class="panel-title">Network Analytics</h2>
+        <div class="analytics-cards">
+          <div class="an-card">
+            <div class="an-icon">✈</div>
+            <div class="an-val" id="an-airports">—</div>
+            <div class="an-lbl">Total Airports</div>
+          </div>
+          <div class="an-card">
+            <div class="an-icon">↔</div>
+            <div class="an-val" id="an-routes">—</div>
+            <div class="an-lbl">Total Routes</div>
+          </div>
+          <div class="an-card">
+            <div class="an-icon">🏢</div>
+            <div class="an-val" id="an-airlines">—</div>
+            <div class="an-lbl">Airlines</div>
+          </div>
+          <div class="an-card">
+            <div class="an-icon">⬡</div>
+            <div class="an-val" id="an-nodes">—</div>
+            <div class="an-lbl">Graph Nodes</div>
+          </div>
+          <div class="an-card">
+            <div class="an-icon">⟷</div>
+            <div class="an-val" id="an-edges">—</div>
+            <div class="an-lbl">Graph Edges</div>
+          </div>
+        </div>
+        <div class="legend-block">
+          <h3 class="section-title">Graph Legend</h3>
+          <div class="legend-item"><span class="legend-dot node-dot"></span>Airport Node</div>
+          <div class="legend-item"><span class="legend-line hub-line"></span>Hub Route (frequent)</div>
+          <div class="legend-item"><span class="legend-line path-line"></span>Shortest Path</div>
+          <div class="legend-item"><span class="legend-line sel-line"></span>Selected Route</div>
+        </div>
+        <div class="hub-list-block">
+          <h3 class="section-title">Global Hubs</h3>
+          <div class="hub-grid">
+            <div class="hub-tag">LHR — London Heathrow</div>
+            <div class="hub-tag">JFK — New York JFK</div>
+            <div class="hub-tag">DXB — Dubai International</div>
+            <div class="hub-tag">SIN — Singapore Changi</div>
+            <div class="hub-tag">CDG — Paris Charles de Gaulle</div>
+            <div class="hub-tag">FRA — Frankfurt Airport</div>
+            <div class="hub-tag">HKG — Hong Kong Int'l</div>
+            <div class="hub-tag">LAX — Los Angeles Int'l</div>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- Centre Map / Graph Canvas -->
+    <div class="canvas-area">
+      <div class="canvas-toolbar">
+        <button class="tool-btn active" id="btn-graph-view" title="Force Graph">
+          <svg viewBox="0 0 20 20" fill="none" width="16">
+            <circle cx="5" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+            <circle cx="15" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+            <circle cx="10" cy="15" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+            <line x1="5" y1="5" x2="15" y2="5" stroke="currentColor" stroke-width="1"/>
+            <line x1="5" y1="5" x2="10" y2="15" stroke="currentColor" stroke-width="1"/>
+            <line x1="15" y1="5" x2="10" y2="15" stroke="currentColor" stroke-width="1"/>
+          </svg>
+          Force Graph
+        </button>
+        <button class="tool-btn" id="btn-map-view" title="Map View">
+          <svg viewBox="0 0 20 20" fill="none" width="16">
+            <ellipse cx="10" cy="10" rx="8" ry="8" stroke="currentColor" stroke-width="1.3"/>
+            <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="0.8"/>
+            <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" stroke-width="0.8"/>
+          </svg>
+          Map View
+        </button>
+        <div class="toolbar-sep"></div>
+        <button class="tool-btn" id="btn-reset-zoom" title="Reset Zoom">⊕ Reset</button>
+        <button class="tool-btn" id="btn-load-sample" title="Load Sample Graph">Sample Hubs</button>
+      </div>
+
+      <!-- D3 Force Graph -->
+      <div id="graph-view" class="view-container active">
+        <svg id="graph-svg" width="100%" height="100%">
+          <defs>
+            <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+              <polygon points="0 0, 6 2, 0 4" fill="var(--accent)"/>
+            </marker>
+            <marker id="arrowhead-path" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+              <polygon points="0 0, 6 2, 0 4" fill="var(--gold)"/>
+            </marker>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g id="graph-root"></g>
+        </svg>
+        <div id="graph-empty" class="empty-hint">
+          <svg viewBox="0 0 60 60" fill="none" width="50">
+            <circle cx="30" cy="30" r="28" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 4"/>
+            <text x="30" y="35" text-anchor="middle" fill="var(--accent)" font-size="20">✈</text>
+          </svg>
+          <p>Search an airport or click <strong>Sample Hubs</strong> to explore the network</p>
+        </div>
+      </div>
+
+      <!-- Map View (SVG world map) -->
+      <div id="map-view" class="view-container">
+        <svg id="map-svg" width="100%" height="100%" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="mapGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#0d2137"/>
+              <stop offset="100%" stop-color="#060c14"/>
+            </radialGradient>
+          </defs>
+          <rect width="1000" height="500" fill="url(#mapGrad)"/>
+          <!-- World outline (simplified) will be drawn by JS -->
+          <g id="map-countries"></g>
+          <g id="map-routes"></g>
+          <g id="map-airports"></g>
+        </svg>
+        <div id="map-tooltip" class="map-tooltip" hidden></div>
+      </div>
+
+      <!-- Loading spinner -->
+      <div id="loading-overlay" class="loading-overlay" hidden>
+        <div class="spinner"></div>
+        <p class="loading-text">Computing…</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Tooltip ────────────────────────────────────────────────── -->
+  <div id="node-tooltip" class="node-tooltip" hidden>
+    <span class="tt-iata">—</span>
+    <span class="tt-name">—</span>
+    <span class="tt-loc">—</span>
+  </div>
+
+  <!-- ── Notification Toast ─────────────────────────────────────── -->
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- Dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
