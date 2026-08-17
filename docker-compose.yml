@@ -1,7 +1,4 @@
-version: "3.9"
-
 services:
-
   mongodb:
     image: mongo:7
     container_name: aerograph-mongo
@@ -15,12 +12,12 @@ services:
     image: neo4j:5
     container_name: aerograph-neo4j
     ports:
-      - "7474:7474"   # Neo4j Browser
-      - "7687:7687"   # Bolt
+      - "7474:7474"
+      - "7687:7687"
     environment:
-      - NEO4J_AUTH=neo4j/password
-      - NEO4J_PLUGINS=["apoc"]
-      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      NEO4J_AUTH: ${NEO4J_AUTH:-neo4j/password}
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*
     volumes:
       - neo4j_data:/data
     restart: unless-stopped
@@ -31,16 +28,15 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/
-      - NEO4J_URI=bolt://neo4j:7687
-      - NEO4J_USER=neo4j
-      - NEO4J_PASS=password
+      MONGO_URI: mongodb://mongodb:27017/
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASS: ${NEO4J_PASS:-password}
     depends_on:
       - mongodb
       - neo4j
     restart: unless-stopped
-    command: >
-      sh -c "python setup_db.py && python app.py"
+    command: sh -c "python setup_db.py && python app.py"
 
 volumes:
   mongo_data:
