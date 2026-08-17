@@ -1,216 +1,223 @@
-# ✈ AeroGraph — Airline Route Graph Explorer
+# ✈️ AeroGraph — Airline Route Graph Explorer
 
-A production-grade web application that models **global airports as graph nodes** and **flight routes as edges**, enabling interactive exploration, connectivity analysis, and shortest-path computation over the OpenFlights dataset.
+> **Interactive graph analytics for global airline networks — built with Flask, MongoDB, Neo4j, and D3.js.**
+
+AeroGraph transforms the OpenFlights dataset into an interactive graph of airports and airline routes. Explore global connectivity, inspect airport hubs, visualize route networks, and calculate shortest paths by **number of hops** or **distance**.
+
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.x-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.x-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Neo4j](https://img.shields.io/badge/Neo4j-5.x-008CC1?logo=neo4j&logoColor=white)](https://neo4j.com/)
+[![D3.js](https://img.shields.io/badge/D3.js-v7-F9A03C?logo=d3.js&logoColor=white)](https://d3js.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
 ---
 
-## 🏗 Tech Stack
+## 🚀 Why AeroGraph?
 
-| Layer      | Technology                          |
-|------------|-------------------------------------|
-| Frontend   | HTML5 · CSS3 · JavaScript ES6+      |
-| Graph Viz  | D3.js v7 (force-directed graph)     |
-| Backend    | Python 3.11 · Flask 3               |
-| Raw Store  | MongoDB 7 (document collections)    |
-| Graph DB   | Neo4j 5 (node/edge traversal)       |
-| Packaging  | Docker · Docker Compose             |
+Airline networks are naturally represented as graphs: **airports are nodes** and **routes are edges**. AeroGraph combines a document database, graph database, REST API, and interactive visualization into one application for exploring that network.
+
+### ✨ Highlights
+
+- 🔎 **Airport Search** — find airports by name, city, country, IATA, or ICAO code
+- 🕸️ **Interactive Force Graph** — explore route connectivity with D3.js
+- 🗺️ **Geographic Route View** — inspect global connections spatially
+- 🧭 **Shortest Path Analysis** — calculate minimum-hop or minimum-distance routes
+- 📊 **Connectivity Analytics** — inspect degree and reachability metrics
+- 🌍 **Global Hub Exploration** — quickly explore major international airports
+- ⚡ **REST API** — programmatic access to airport, route, graph, and analytics data
+- 🐳 **Dockerized Setup** — run the application and databases together with Docker Compose
+
+---
+
+## 🧰 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript ES6+ |
+| Visualization | D3.js v7 |
+| Backend | Python 3.11, Flask 3 |
+| Document Database | MongoDB 7 |
+| Graph Database | Neo4j 5 |
+| Containers | Docker, Docker Compose |
+| Data Source | OpenFlights |
+
+---
+
+## 🧠 Graph Algorithms
+
+| Analysis | Approach | Purpose |
+|---|---|---|
+| BFS / Hop Count | Neo4j shortest-path traversal | Minimum-transfer routing |
+| Dijkstra | Neo4j APOC | Minimum-distance routing |
+| Degree Analysis | Cypher aggregation | Identify highly connected hubs |
+| Reachability | Cypher `*1..2` traversal | Measure local network connectivity |
+
+---
+
+## 🏗️ Architecture
+
+```text
+                 ┌──────────────────────┐
+                 │   Web UI / D3.js     │
+                 └──────────┬───────────┘
+                            │ HTTP / REST
+                 ┌──────────▼───────────┐
+                 │     Flask API        │
+                 └──────┬────────┬──────┘
+                        │        │
+              ┌─────────▼───┐  ┌▼────────────┐
+              │   MongoDB   │  │    Neo4j    │
+              │ airport data│  │ route graph │
+              └─────────────┘  └─────────────┘
+
+                 OpenFlights Dataset
+                         │
+                         ▼
+                   Data Loader
+```
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 airline-route-explorer/
-├── app.py                 # Flask REST API
-├── setup_db.py            # Data loader (MongoDB + Neo4j)
-├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
-├── .env.example
-├── data/                  # OpenFlights .dat files (auto-downloaded)
-│   ├── airports.dat
-│   ├── routes.dat
-│   └── airlines.dat
+├── app.py                  # Flask REST API
+├── setup_db.py             # OpenFlights data loader
+├── requirements.txt        # Python dependencies
+├── Dockerfile              # Application container
+├── docker-compose.yml      # Multi-service orchestration
+├── .env.example            # Environment configuration template
+├── data/                   # OpenFlights datasets
 ├── templates/
-│   └── index.html         # Single-page interface
+│   └── index.html           # Main web interface
 └── static/
-    ├── css/style.css
-    └── js/main.js
+    ├── css/style.css        # UI styling
+    └── js/main.js            # Frontend logic + D3 visualization
 ```
 
 ---
 
-## 🚀 Quick Start
+## ⚡ Quick Start
 
-### Option A — Docker Compose (recommended)
+### Option 1 — Docker Compose (recommended)
 
 ```bash
-# Clone or unzip the project
-cd airline-route-explorer
-
-# Start all services (MongoDB, Neo4j, Flask app)
-docker-compose up --build
+git clone https://github.com/Rana-fahar-26/Airline-Route-Graph-Explorer.git
+cd Airline-Route-Graph-Explorer
+docker compose up --build
 ```
 
-Open http://localhost:5000
+Then open:
 
-> First run downloads the OpenFlights dataset, loads MongoDB, and builds the Neo4j graph (~2 min).
+```text
+http://localhost:5000
+```
 
----
+On first startup, the project downloads the OpenFlights datasets, loads MongoDB, and builds the Neo4j graph.
 
-### Option B — Manual Setup
-
-#### 1. Install dependencies
+### Option 2 — Manual Setup
 
 ```bash
 pip install -r requirements.txt
-```
-
-#### 2. Start MongoDB
-
-```bash
-# Install MongoDB Community and start
-mongod --dbpath /data/db
-```
-
-#### 3. Start Neo4j
-
-Download Neo4j Community Edition from https://neo4j.com/download/  
-Set bolt password to `password` or update `.env`.
-
-> **APOC Plugin** — For distance-based shortest paths, install the APOC plugin in Neo4j.
-
-#### 4. Configure environment
-
-```bash
 cp .env.example .env
-# Edit MONGO_URI, NEO4J_URI, NEO4J_USER, NEO4J_PASS as needed
-```
-
-#### 5. Load data
-
-```bash
 python setup_db.py
-```
-
-This will:
-- Download `airports.dat`, `routes.dat`, `airlines.dat` from OpenFlights
-- Parse and insert ~7,500 airports, ~67,000 routes into MongoDB
-- Build Neo4j graph: Airport nodes + ROUTE relationships with haversine distances
-
-#### 6. Run the server
-
-```bash
 python app.py
 ```
 
-Open http://localhost:5000
+Make sure MongoDB and Neo4j are running and the values in `.env` match your local configuration.
 
 ---
 
-## 🌐 API Reference
+## 🌐 REST API
 
-| Method | Endpoint                       | Description                          |
-|--------|--------------------------------|--------------------------------------|
-| GET    | `/api/stats`                   | Graph-level statistics               |
-| GET    | `/api/airports/search?q=`      | Search airports by name/IATA/city    |
-| GET    | `/api/airports/<IATA>`         | Single airport details               |
-| GET    | `/api/routes/<IATA>`           | All outbound routes (Neo4j)          |
-| GET    | `/api/shortest-path?from=&to=` | Shortest path (hops or distance)     |
-| GET    | `/api/graph/sample`            | Sample hub subgraph for visualisation|
-| GET    | `/api/connectivity/<IATA>`     | Degree + reachability metrics        |
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/api/stats` | Graph-level statistics |
+| `GET` | `/api/airports/search?q=` | Search airports |
+| `GET` | `/api/airports/<IATA>` | Airport details |
+| `GET` | `/api/routes/<IATA>` | Outbound routes |
+| `GET` | `/api/shortest-path?from=&to=` | Shortest path analysis |
+| `GET` | `/api/graph/sample` | Sample graph for visualization |
+| `GET` | `/api/connectivity/<IATA>` | Degree and reachability metrics |
 
-### Example Requests
+Example:
 
 ```bash
-# Search airports
 curl "http://localhost:5000/api/airports/search?q=dubai"
-
-# Get routes from Dubai
 curl "http://localhost:5000/api/routes/DXB"
-
-# Shortest path: London → Singapore
 curl "http://localhost:5000/api/shortest-path?from=LHR&to=SIN&mode=hops"
 ```
 
 ---
 
-## 🗂 Data Model
-
-### MongoDB Collections
-
-**airports**
-```json
-{
-  "iata": "LHR", "name": "London Heathrow",
-  "city": "London", "country": "United Kingdom",
-  "lat": 51.477500, "lon": -0.461389,
-  "icao": "EGLL", "timezone": "Europe/London"
-}
-```
-
-**routes**
-```json
-{
-  "airline": "BA", "src_iata": "LHR", "dst_iata": "JFK",
-  "stops": 0, "equipment": "777", "distance_km": 5540
-}
-```
-
-**airlines**
-```json
-{
-  "iata": "EK", "name": "Emirates",
-  "country": "United Arab Emirates", "active": true
-}
-```
-
-### Neo4j Graph Schema
-
-```
-(:Airport {iata, name, city, country, lat, lon})
-  -[:ROUTE {airline, stops, distance, equipment}]->
-(:Airport)
-```
-
----
-
-## 🎯 Features
-
-- **Airport Search** — fuzzy search across name, city, country, IATA/ICAO codes
-- **Route Explorer** — visualise all direct connections from any airport
-- **Force Graph** — D3.js interactive network with drag, zoom, and tooltips
-- **Map View** — geographic projection with great-circle arc routes
-- **Shortest Path** — minimum hops OR minimum distance via Neo4j traversal
-- **Connectivity Analytics** — in/out degree, 2-hop reachability
-- **Global Hub Heatmap** — quick-jump to major hub airports
-
----
-
 ## 📊 Dataset
 
-Source: [OpenFlights](https://openflights.org/data.html)
+AeroGraph uses the **OpenFlights** dataset containing airport, route, and airline information.
 
-| File          | Records  | Description                     |
-|---------------|----------|---------------------------------|
-| airports.dat  | ~7,500   | Airport metadata + coordinates  |
-| routes.dat    | ~67,000  | Airline routes (src → dst)      |
-| airlines.dat  | ~5,888   | Airline names and codes         |
+| Dataset | Approx. records | Description |
+|---|---:|---|
+| `airports.dat` | ~7,500 | Airport metadata and coordinates |
+| `routes.dat` | ~67,000 | Airline route relationships |
+| `airlines.dat` | ~5,888 | Airline names and codes |
 
----
-
-## 🛠 Graph Algorithms
-
-| Algorithm       | Implementation           | Use Case               |
-|-----------------|--------------------------|------------------------|
-| BFS / Hop Count | Neo4j `shortestPath()`   | Min-transfer routing   |
-| Dijkstra        | Neo4j APOC `dijkstra()`  | Min-distance routing   |
-| Degree Analysis | Cypher aggregation       | Hub identification     |
-| Reachability    | Cypher `*1..2` traversal | 2-hop reach count      |
+Source: [OpenFlights Data](https://openflights.org/data.html)
 
 ---
 
-## 👥 Team / Credits
+## 🔐 Configuration
 
-Built with ❤️ using the OpenFlights open dataset.  
-Graph processing powered by Neo4j · Data storage by MongoDB · Visualised with D3.js.
+Copy the example environment file and configure your local database credentials:
+
+```bash
+cp .env.example .env
+```
+
+Typical settings include:
+
+```env
+MONGO_URI=...
+NEO4J_URI=...
+NEO4J_USER=...
+NEO4J_PASS=...
+```
+
+> Never commit real credentials, API keys, or production secrets to GitHub.
+
+---
+
+## 🎓 What This Project Demonstrates
+
+This project brings together several practical software-engineering and computer-science concepts:
+
+- REST API development with Flask
+- Graph data modeling with Neo4j
+- Document data modeling with MongoDB
+- BFS and shortest-path concepts
+- Dijkstra-based weighted routing
+- Data ingestion and transformation
+- Interactive data visualization with D3.js
+- Docker-based development environments
+- Full-stack application architecture
+
+---
+
+## 👨‍💻 Author
+
+**Fahar Inam Rana**  
+Computer Science Student · AI Engineer · Full-Stack Developer
+
+- GitHub: [@Rana-fahar-26](https://github.com/Rana-fahar-26)
+- LinkedIn: [Fahar Inam Rana](https://www.linkedin.com/in/rana-fahar-inam-156034363/)
+- Email: `ranafaharinam@gmail.com`
+
+---
+
+## 📌 Status
+
+**Active portfolio project** — continuously improving the architecture, visualization, and developer experience.
+
+---
+
+⭐ If you find this project useful, consider giving it a star.
